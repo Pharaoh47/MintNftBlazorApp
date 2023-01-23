@@ -1,0 +1,31 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+@inject IJSRuntime IJSRuntime
+
+
+<PageTitle>Index</PageTitle>
+
+@if (!string.IsNullOrEmpty(username))
+{
+	<h1>Hello, @username!</h1>
+}
+
+
+@code {
+
+	string username = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		var userdata = await IJSRuntime.InvokeAsync<string>("localStorage.getItem", "user").ConfigureAwait(false);
+		if (!string.IsNullOrWhiteSpace(userdata))
+		{
+			username = userdata.Split(';', 2)[0];
+		}
+		else
+		{
+			NavigationManager.NavigateTo("/signin");
+		}
+	}
+}
