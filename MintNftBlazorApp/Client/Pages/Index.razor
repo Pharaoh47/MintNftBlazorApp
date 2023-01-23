@@ -8,6 +8,7 @@
 @if (!string.IsNullOrEmpty(username))
 {
 	<h1>Hello, @username!</h1>
+	<button class="btn btn-primary" @onclick="SignOut">Sign out</button>
 }
 
 
@@ -27,5 +28,11 @@
 		{
 			NavigationManager.NavigateTo("/signin");
 		}
+	}
+
+	private async Task SignOut()
+	{
+		await IJSRuntime.InvokeAsync<string>("localStorage.removeItem", "user").ConfigureAwait(false);
+		NavigationManager.NavigateTo("/signin");
 	}
 }
