@@ -3,11 +3,11 @@
 @inject IJSRuntime IJSRuntime
 
 
-<PageTitle>Index</PageTitle>
+<h>Index</h>
 
 @if (!string.IsNullOrEmpty(username))
 {
-	<h1>Hello, @username!</h1>
+	<p>Hello @username</p>
 	<button class="btn btn-primary" @onclick="SignOut">Sign out</button>
 }
 

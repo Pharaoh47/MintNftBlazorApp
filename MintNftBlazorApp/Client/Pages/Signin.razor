@@ -4,27 +4,23 @@
 @inject HttpClient HttpClient
 @inject IJSRuntime IJSRuntime
 
-<h3>Sign in</h3>
 
+<h1>Sign in</h1>
 <p>@message</p>
 
-<div class="card">
-    <div class="card-body">
-        <EditForm Model="user" OnValidSubmit="OnValid">
-            <DataAnnotationsValidator />
-			<ValidationSummary />
-            <div class="form-group">
-                <label>Username</label>
-				<InputText @bind-Value="user.Username" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-				<InputText @bind-Value="user.Password" type="password" class="form-control" />
-            </div>
-			<button class="btn btn-primary" disabled="@isDisabled">Login</button>
-        </EditForm>
+<EditForm Model="user" OnValidSubmit="OnValid">
+    <DataAnnotationsValidator />
+	<ValidationSummary />
+	<div class="form-group col-md-6">
+        <label>Username</label>
+		<InputText @bind-Value="user.Username" class="form-control" />
     </div>
-</div>
+    <div class="form-group col-md-6">
+        <label>Password</label>
+		<InputText @bind-Value="user.Password" type="password" class="form-control" />
+    </div>
+	<button class="btn btn-primary" disabled="@isDisabled">Login</button>
+</EditForm>
 
 @code {
 	UserModel user = new UserModel();
@@ -47,6 +43,16 @@
 					NavigationManager.NavigateTo("/");
 				}
 			}
+		}
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		var userdata = await IJSRuntime.InvokeAsync<string>("localStorage.getItem", "user").ConfigureAwait(false);
+		if (!string.IsNullOrWhiteSpace(userdata))
+		{
+			NavigationManager.NavigateTo("/");
 		}
 	}
 }
